@@ -1,1 +1,141 @@
+#include<iostream>
+using namespace std;
+
+//class representing the blueprint of each node
+class Node{
+public:
+    int data;
+    Node *next;
+    //constructor to initialize a new node 
+    Node(int value){
+        data = value;
+        next = nullptr;
+    }
+};
+
+// class to create and maintain Linked List
+class LinkedList{
+private:
+    Node *head;
+
+public:
+    LinkedList(){
+        head = nullptr;
+    }
+    // function to insert an element to the end
+    void insertAtEnd(int value){
+        Node *newNode = new Node(value);
+        if(head == nullptr)
+            head  = newNode;
+        else{
+            Node *current = head;
+            while(current->next != nullptr )
+                current = current->next;
+            current->next = newNode;
+        }
+    }
+    // function to insert a node to a particular position
+    void insertAtPosition(int value, int k){
+        Node *newNode = new Node(value);
+        if(k<1){
+            cout<<"Invalid position"<<endl;
+            delete newNode;
+            return;
+        }
+        else if(k==1){
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+        else{
+            int counter =1;
+            Node *current = head;
+
+            while(counter<(k-1) && current->next!=nullptr){
+                current = current->next;
+                counter++;
+            }
+            if(counter != k-1){
+                cout<<"Invalid Position"<<endl;
+                delete newNode;
+                return;
+            }
+            newNode->next = current->next;
+            current->next = newNode;
+        }
+    }
+    void deleteValue(int value){
+        if(head==nullptr){
+            cout<<"The list is empty"<<endl;
+            return;
+        }
+        else if(head->data == value){
+            Node *temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+        else{
+            Node *temp;
+            Node *current = head;
+
+            while(current->next!=nullptr && current->next->data!=value)
+                current = current->next;
+
+            if(current->next==nullptr){
+                cout<<"Value not found"<<endl;
+                return;
+            }
+            temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+            return;
+        }
+    }
+
+    // function to display the list
+    void display(){
+        if(head==nullptr)
+            cout<<"The list is empty."<<endl;
+        else{
+            Node *current = head;
+            while(current != nullptr){
+                cout<< current->data << " -> ";
+                current = current->next;
+            }
+            cout<<"NULL"<<endl;
+        }
+    }
+    //destructor
+    ~LinkedList(){
+        Node *current;
+        while(head!=nullptr){
+            current = head;
+            head = head->next;
+            delete current;
+        }
+    }
+};
+int main()
+{
+    LinkedList myList;
+
+    myList.insertAtEnd(10);
+    myList.insertAtEnd(15);
+    myList.insertAtEnd(20);
+    myList.insertAtEnd(5);
+
+    myList.display();
+
+    myList.insertAtPosition(55, 3);
+    myList.insertAtPosition(55, 5);
+
+    myList.display();
+
+    myList.deleteValue(20);
+
+    myList.display();
+
+    return 0;
+}
 
